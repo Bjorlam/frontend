@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HeaderWidget from "@/widgets/HeaderWidget";
+import Index from "@/features/NotificationFeature/inedx"
 </script>
 
 <template>
@@ -10,17 +11,18 @@ import HeaderWidget from "@/widgets/HeaderWidget";
   <div>
     <RouterView/>
   </div>
-  <!-- <div>
-      <NotificationFeature />
-  </div> -->
+  <div>
+    <Index/>
+  </div>
 </template>
 
 <script lang="ts">
 import {useThemeProvider} from "./providers/ThemeProvider/ThemeProvider";
+import {defineComponent} from "vue";
 
-export default {
-  created() {
-    useThemeProvider();
-  },
-};
+export default defineComponent({
+  async mounted() {
+    await useThemeProvider()
+  }
+});
 </script>

@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="ts">
 import SecondaryButtonWidget from '@/shared/ui/Button/variants/SecondaryButtonWidget.vue';
 import InformationIcon from 'vue-material-design-icons/Information.vue';
 </script>
@@ -19,13 +19,15 @@ import InformationIcon from 'vue-material-design-icons/Information.vue';
   </div>
 </template>
 
-<script lang="js">
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   props: {
     message: {
       required: true,
       type: String,
     }
   }
-};
+});
 </script>
