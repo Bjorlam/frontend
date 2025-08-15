@@ -1,0 +1,49 @@
+* {
+    font-family: "Onest", sans-serif;
+}
+
+#app {
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: 100%;
+    user-select: none;
+
+    font-size: 16px;
+}
+
+.wrapper-base {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.link {
+    color: var(--color-text-200);
+}
+
+.link:visited {
+    color: var(--color-text-200);
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.wrapper-922 * {
+    max-width: 922px !important;
+}
+
+.wrapper-1152 * {
+    max-width: 1152px;
+}
+
+.wrapper-1280 * {
+    max-width: 1280px;
+}
+
+body {
+    margin: 0;
+}
