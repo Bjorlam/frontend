@@ -1,4 +1,4 @@
-import PrimaryButtonWidget from "./variants/PrimaryButtonWidget.vue";
-import SecondaryButtonWidget from "./variants/SecondaryButtonWidget.vue";
+import PrimaryButton from "./variants/PrimaryButton.vue";
+import SecondaryButton from "./variants/SecondaryButton.vue";
 
-export { PrimaryButtonWidget, SecondaryButtonWidget };
+export {PrimaryButton, SecondaryButton};

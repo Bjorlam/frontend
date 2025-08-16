@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HeaderWidget from "@/widgets/HeaderWidget";
-import Index from "@/features/NotificationFeature/inedx"
+import Alerts from "@/features/AlertsFeature/inedx"
 </script>
 
 <template>
@@ -12,17 +12,22 @@ import Index from "@/features/NotificationFeature/inedx"
     <RouterView/>
   </div>
   <div>
-    <Index/>
+    <Alerts/>
   </div>
 </template>
 
 <script lang="ts">
 import {useThemeProvider} from "./providers/ThemeProvider/ThemeProvider";
 import {defineComponent} from "vue";
+import {useAlertProvider} from "@/app/providers/AlertsProvider/AlertProvider";
+import {useDeparturesProvider} from "@/app/providers/DeparturesProvider/DeparturesProvider.ts";
+
 
 export default defineComponent({
   async mounted() {
     await useThemeProvider()
+    await useAlertProvider()
+    await useDeparturesProvider()
   }
 });
 </script>

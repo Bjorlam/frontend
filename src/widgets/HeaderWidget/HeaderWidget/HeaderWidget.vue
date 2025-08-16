@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {SecondaryButtonWidget} from '@/shared/ui/Button';
+import {SecondaryButton} from '@/shared/ui/Button';
 import WebIcon from 'vue-material-design-icons/Web.vue';
 import WeatherSunnyIcon from 'vue-material-design-icons/WeatherSunny.vue';
 import WeatherNightIcon from 'vue-material-design-icons/WeatherNight.vue';
@@ -10,14 +10,14 @@ import Logo from '@/shared/ui/Logo';
 <template>
   <div class="flex items-center justify-between h-8">
     <Logo class="h-1/2"/>
-    <div class="flex">
-      <SecondaryButtonWidget>
+    <div class="flex [&>*+*]:ml-2">
+      <SecondaryButton class="border-none">
         <WebIcon/>
-      </SecondaryButtonWidget>
-      <SecondaryButtonWidget @click="toggleTheme" class="ml-2">
+      </SecondaryButton>
+      <SecondaryButton @click="toggleTheme" class="border-none">
         <WeatherSunnyIcon v-if="ThemeApi.getStore().state.current == 'dark'"/>
         <WeatherNightIcon v-else/>
-      </SecondaryButtonWidget>
+      </SecondaryButton>
     </div>
   </div>
 </template>

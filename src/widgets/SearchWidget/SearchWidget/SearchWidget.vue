@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PrimaryButtonWidget} from '@/shared/ui/Button/index.js';
+import {PrimaryButton} from '@/shared/ui/Button';
 import PinOutlineIcon from 'vue-material-design-icons/PinOutline.vue';
 import DefaultRadioGroup, {radioOption} from '@/shared/ui/RadioGroup';
 import PrimaryInput from '@/shared/ui/Input';
@@ -13,37 +13,64 @@ import PrimaryInput from '@/shared/ui/Input';
     </div>
     <div class="mt-5 flex w-full flex-col">
       <div class="[&>*+*]:mt-4">
-        <PrimaryInput placeholder="Ростов-На-Дону">Откуда</PrimaryInput>
-        <PrimaryInput placeholder="Краснодар">Куда</PrimaryInput>
+        <PrimaryInput :placeholder="fromCity">Откуда</PrimaryInput>
+        <PrimaryInput :placeholder="toCity">Куда</PrimaryInput>
 
         <div>
           <DefaultRadioGroup
               :options="[
-                            radioOption('1', 'Один'),
-                            radioOption('2', 'Один'),
-                            radioOption('3', 'Один'),
-                            radioOption('4', 'Один'),
-                        ]"
+                radioOption(1, 'Один'),
+                radioOption(2, 'Два'),
+                radioOption(3, 'Три'),
+                radioOption(4, 'Четыре'),
+              ]"
               v-model="selectedPassengerType"
           >Пассажиры
-          </DefaultRadioGroup
-          >
+          </DefaultRadioGroup>
         </div>
         <PrimaryInput placeholder="15.08.2025" value="15.08.2025">Дата</PrimaryInput>
       </div>
-      <PrimaryButtonWidget class="mt-4">Найти рейсы</PrimaryButtonWidget>
+      <PrimaryButton class="mt-4">Найти рейсы</PrimaryButton>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {getAllDepartures} from "@/entities/DeparturesEntity/api/DeparturesEntityApi.ts";
+import type {DepartureType} from "@/entities/DeparturesEntity/types/DepartureType.ts";
 
 export default defineComponent({
   data() {
     return {
       selectedPassengerType: 1,
+      fromCity: "Ростов-На-Дону",
+      toCity: "Краснодар",
     };
   },
-})
+  methods: {
+    getRandomCity(departures: DepartureType[]): string {
+      if (departures.length === 0) return "";
+      const index = Math.floor(Math.random() * departures.length);
+      return departures[index].name;
+    },
+    async setRandomCities() {
+      let departures: DepartureType[] = [];
+
+      // Ждём, пока список не станет доступен
+      while (departures.length === 0) {
+        departures = getAllDepartures();
+        if (departures.length === 0) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
+
+      this.fromCity = this.getRandomCity(departures);
+      this.toCity = this.getRandomCity(departures);
+    },
+  },
+  async mounted() {
+    await this.setRandomCities();
+  }
+});
 </script>
