@@ -14,7 +14,7 @@ import WindowCloseIcon from 'vue-material-design-icons/WindowClose.vue';
       </div>
 
       <SecondaryButton
-          class="border-none ml-auto !h-fit !p-1"
+          class="border-none ml-auto !h-fit !p-1 min-h-fit"
           @click="handleClose"
       >
         <WindowCloseIcon/>

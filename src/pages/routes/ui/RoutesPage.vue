@@ -1,12 +1,24 @@
-<template>
-  <div class="wrapper-base wrapper-922">
-    <div class="w-full">
-      <div class="w-full flex justify-center py-20">
-        <div class="text-3xl archivo-black">Search bus tickets</div>
-      </div>
-      aboba
-    </div>
-  </div>
-</template>
+<script setup lang="ts">
+import RouteListFeature from "@/features/RoutesListFeature";
+import { fromRouteParams, type RouterRoutesType } from "@/app/router/types/RouterRoutesType.ts";
+import SearchInfoWidget from "@/widgets/RouteInfoWidget/index.ts";
 
-<style scoped></style>
+const props = defineProps<{
+    cityDepartureId: string;
+    cityArrivalId: string;
+    date: string;
+    person: string;
+}>();
+
+const routerParams: RouterRoutesType = fromRouteParams(props);
+</script>
+
+<template>
+    <div class="wrapper-base wrapper-922">
+        <div class="w-full">
+            <SearchInfoWidget :searchParams="routerParams" class="my-10" />
+
+            <RouteListFeature :searchParams="routerParams" />
+        </div>
+    </div>
+</template>
