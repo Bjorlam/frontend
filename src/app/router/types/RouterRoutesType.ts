@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export interface RouterRoutesType {
     cityDepartureId: number;
     cityArrivalId: number;
@@ -18,7 +20,7 @@ export function toRouteParams(params: RouterRoutesType): Record<string, string> 
     return {
         cityDepartureId: String(params.cityDepartureId),
         cityArrivalId: String(params.cityArrivalId),
-        date: params.date.toISOString(),
+        date: format(params.date, "dd.MM.yyyy"),
         person: String(params.person),
     };
 }

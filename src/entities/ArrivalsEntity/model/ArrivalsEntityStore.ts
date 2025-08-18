@@ -4,11 +4,13 @@ import type { ArrivalType } from "../types/ArrivalType";
 export const useArrivalsEntityStore = defineStore("arrivals", {
     state: () => ({
         arrivals: [] as ArrivalType[],
+        departure: undefined as unknown as number,
     }),
 
     actions: {
-        setArrivals(arrivals: ArrivalType[]) {
+        setArrivals(arrivals: ArrivalType[], departure: number) {
             this.arrivals = arrivals;
+            this.departure = departure;
         },
 
         getAll(): ArrivalType[] {
@@ -21,6 +23,9 @@ export const useArrivalsEntityStore = defineStore("arrivals", {
 
         getByCityID(cityID: number): ArrivalType | undefined {
             return this.arrivals.find((arr) => arr.cityID === cityID);
+        },
+        getDeparture(): number | undefined {
+            return this.departure;
         },
     },
 });

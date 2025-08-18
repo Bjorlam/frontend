@@ -22,10 +22,17 @@ import ArrowLeftIcon from "vue-material-design-icons/ArrowLeft.vue";
             </div>
             <div>
                 <CalendarMonthOutlineIcon />
-                <div>{{ formatDate(date) }}</div>
+                <div>{{ format(date, "dd.MM.yyyy") }}</div>
             </div>
         </div>
-        <SecondaryButton class="w-full mt-2 min-h-fit h-fit !py-1" @click="$router.push({ name: 'home' })">
+        <SecondaryButton
+            class="w-full mt-2 min-h-fit h-fit !py-1"
+            @click="
+                $router.push({
+                    name: 'home',
+                    query: toQueryParams(createRouterHomeQueryType(cityDepartureName, cityArrivalName, date, person)),
+                })
+            ">
             <div class="flex w-full justify-center">
                 <ArrowLeftIcon class="**:fill-secondary-300" />
                 <div class="w-full">Изменить</div>
@@ -36,6 +43,8 @@ import ArrowLeftIcon from "vue-material-design-icons/ArrowLeft.vue";
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { createRouterHomeQueryType, type fromQueryParams, toQueryParams } from "@/app/router/types/RouterHomeQueryType";
+import { format } from "date-fns";
 export default defineComponent({
     props: {
         cityDepartureName: {
@@ -53,14 +62,6 @@ export default defineComponent({
         date: {
             type: Date,
             required: true,
-        },
-    },
-    methods: {
-        formatDate(date: Date): string {
-            const day = date.getDate().toString().padStart(2, "0");
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const year = date.getFullYear();
-            return `${day}.${month}.${year}`;
         },
     },
 });

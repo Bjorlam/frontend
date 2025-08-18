@@ -51,14 +51,15 @@ export default defineComponent({
             this.isDeparturesLoaded = true;
         },
         setArrivals(): void {
-            if (ArrivalsEntityApi.getAllArrivals().length !== 0) {
+            if (ArrivalsEntityApi.getAllArrivals().length !== 0 && this.searchParams.cityDepartureId == Number(ArrivalsEntityApi.getDeparture())) {
                 this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
                 this.isArrivalsLoaded = true;
+                return;
             }
 
             apiGetArrivals(this.searchParams.cityDepartureId)
                 .then((arrivals) => {
-                    ArrivalsEntityApi.setArrivals(arrivals);
+                    ArrivalsEntityApi.setArrivals(arrivals, this.searchParams.cityDepartureId);
                     this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
                     this.isArrivalsLoaded = true;
                 })

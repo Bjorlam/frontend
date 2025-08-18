@@ -1,9 +1,9 @@
 import { useArrivalsEntityStore } from "../model/ArrivalsEntityStore";
 import type { ArrivalType } from "../types/ArrivalType";
 
-export function setArrivals(arrivals: ArrivalType[]): void {
+export function setArrivals(arrivals: ArrivalType[], departure: number): void {
     const store = useArrivalsEntityStore();
-    store.setArrivals(arrivals);
+    store.setArrivals(arrivals, departure);
 }
 
 export function getAllArrivals(): ArrivalType[] {
@@ -23,4 +23,8 @@ export function getArrivalByCityID(cityID: number): ArrivalType | undefined {
 
 export function getStore() {
     return useArrivalsEntityStore();
+}
+
+export function getDeparture(): number | undefined {
+    return useArrivalsEntityStore().getDeparture();
 }
