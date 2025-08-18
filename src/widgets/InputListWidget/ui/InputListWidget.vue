@@ -1,0 +1,103 @@
+<script setup lang="ts">
+import SecondaryButton from "@/shared/ui/Button/variants/SecondaryButton.vue";
+import PrimaryInput from "@/shared/ui/Input/index.ts";
+import CloseIcon from "vue-material-design-icons/Close.vue";
+import { ref, nextTick, defineProps, defineEmits, onMounted, onBeforeUnmount, computed } from "vue";
+import type { InputListItemType } from "../types/InputListItemType";
+import InputListItem from "./components/InputListItem.vue";
+import InputListItemSkeleton from "./components/InputListItemSkeleton.vue";
+
+const props = defineProps<{
+    modelValue: string;
+    items: InputListItemType[];
+    placeholder?: string;
+    label?: string;
+}>();
+
+const emit = defineEmits<{
+    (e: "update:model-value", value: string): void;
+}>();
+
+const opened = ref(false);
+const inputValue = ref(props.modelValue);
+const inputs = ref<InstanceType<typeof PrimaryInput>>();
+
+const filteredItems = computed(() => {
+    if (!inputValue.value) return props.items;
+    return props.items.filter((item) => item.label.toLowerCase().includes(inputValue.value.toLowerCase()));
+});
+
+function open() {
+    opened.value = true;
+    inputValue.value = props.modelValue;
+    history.pushState({ isInputListOpened: true }, "");
+    nextTick(() => {
+        inputs.value?.focus();
+    });
+}
+
+function close() {
+    opened.value = false;
+}
+
+function handleBack() {
+    if (opened.value) {
+        opened.value = false;
+        history.pushState(null, "");
+    } else {
+        history.back();
+    }
+}
+
+function select(item: InputListItemType) {
+    inputValue.value = item.label;
+    emit("update:model-value", item.label);
+    close();
+}
+
+onMounted(() => {
+    window.addEventListener("popstate", handleBack);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("popstate", handleBack);
+});
+</script>
+
+<template>
+    <div>
+        <div class="font-semibold pb-1" v-if="props.label">{{ props.label }}</div>
+        <SecondaryButton @click="open" class="w-full flex justify-start cursor-text active:bg-transparent" :class="[props.modelValue === '' ? 'text-text-200' : '']">
+            {{ props.modelValue === "" ? props.placeholder : props.modelValue }}
+        </SecondaryButton>
+    </div>
+
+    <div v-if="opened" class="absolute min-w-full min-h-screen left-0 top-0 !m-0 bg-background">
+        <div class="h-12 w-full border-b-2 border-b-secondary-100 wrapper-base">
+            <div class="flex items-center justify-between w-full">
+                <div class="font-medium text-lg w-full text-center">{{ label }}</div>
+                <SecondaryButton class="border-none px-[10px]" @click="close">
+                    <CloseIcon />
+                </SecondaryButton>
+            </div>
+        </div>
+
+        <div class="wrapper-base mt-5">
+            <div class="w-full flex flex-col space-y-5">
+                <div class="bg-primary-100 p-2 rounded-lg">
+                    <PrimaryInput ref="inputs" :placeholder="props.placeholder" v-model="inputValue" />
+                </div>
+
+                <div class="flex flex-col space-y-3">
+                    <div v-if="props.items.length === 0" class="flex flex-col space-y-3">
+                        <InputListItemSkeleton />
+                        <InputListItemSkeleton />
+                        <InputListItemSkeleton />
+                    </div>
+
+                    <InputListItem v-for="item in filteredItems" :key="item.label" :item="item" @click="select(item)" />
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

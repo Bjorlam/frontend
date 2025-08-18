@@ -1,0 +1,11 @@
+@keyframes loading {
+    0% {
+        left: -230px;
+    }
+    100% {
+        left: calc(100% + 150px);
+    }
+}
+.animate-loading {
+    animation: loading 2s ease-in-out infinite;
+}
