@@ -4,7 +4,7 @@ import RouteSkeleton from "./Route/RouteSkeleton.vue";
 </script>
 
 <template>
-    <div v-if="isLoading" class="[&>*+*]:mt-10">
+    <div v-if="isLoading || !isDeparturesLoaded" class="[&>*+*]:mt-10">
         <RouteSkeleton />
         <RouteSkeleton />
     </div>
@@ -14,12 +14,13 @@ import RouteSkeleton from "./Route/RouteSkeleton.vue";
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, handleError } from "vue";
 import { getRoutes } from "@/shared/api/API/routes/routes";
 import type { RouteType } from "@/shared/api/API/routes/types";
 import type { PropType } from "vue";
 import type { RouterRoutesType } from "@/app/router/types/RouterRoutesType.ts";
 import { Types as DeparturesEntityTypes, Api as DeparturesEntityApi } from "@/entities/DeparturesEntity";
+import { watch } from "vue";
 
 export default defineComponent({
     props: {
@@ -32,25 +33,28 @@ export default defineComponent({
         return {
             routes: [] as RouteType[],
             isLoading: true,
+            isDeparturesLoaded: false,
+            departuresStore: DeparturesEntityApi.getStore(),
         };
     },
     created() {
         try {
+            this.isDeparturesLoaded = DeparturesEntityApi.getAllDepartures().length !== 0;
+
             getRoutes(this.searchParams.cityDepartureId, this.searchParams.cityArrivalId, this.searchParams.date, this.searchParams.person).then((data) => {
                 this.routes = data;
-                let departures: DeparturesEntityTypes.DepartureType[] = DeparturesEntityApi.getAllDepartures();
-
-                while (departures.length === 0) {
-                    departures = DeparturesEntityApi.getAllDepartures();
-                    if (departures.length === 0) {
-                        new Promise((resolve) => setTimeout(resolve, 100));
-                    }
-                }
                 this.isLoading = false;
             });
         } catch (error) {
             console.error("Error fetching routes:", error);
         }
+    },
+    watch: {
+        "departuresStore.departures": {
+            handler() {
+                this.isDeparturesLoaded = true;
+            },
+        },
     },
 });
 </script>
