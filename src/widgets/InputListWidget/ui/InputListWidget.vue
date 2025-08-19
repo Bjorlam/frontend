@@ -6,7 +6,6 @@ import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import {
     ref,
     nextTick,
-    defineProps,
     defineEmits,
     onMounted,
     onBeforeUnmount,
