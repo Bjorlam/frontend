@@ -3,14 +3,7 @@ import SecondaryButton from "@/shared/ui/Button/variants/SecondaryButton.vue";
 import PrimaryInput from "@/shared/ui/Input/index.ts";
 import CloseIcon from "vue-material-design-icons/Close.vue";
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
-import {
-    ref,
-    nextTick,
-    defineEmits,
-    onMounted,
-    onBeforeUnmount,
-    computed,
-} from "vue";
+import { ref, nextTick, onMounted, onBeforeUnmount, computed } from "vue";
 import type { InputListItemType } from "../types/InputListItemType";
 import InputListItem from "./components/InputListItem.vue";
 import InputListItemSkeleton from "./components/InputListItemSkeleton.vue";
