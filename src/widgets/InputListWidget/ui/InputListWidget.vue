@@ -2,7 +2,16 @@
 import SecondaryButton from "@/shared/ui/Button/variants/SecondaryButton.vue";
 import PrimaryInput from "@/shared/ui/Input/index.ts";
 import CloseIcon from "vue-material-design-icons/Close.vue";
-import { ref, nextTick, defineProps, defineEmits, onMounted, onBeforeUnmount, computed } from "vue";
+import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
+import {
+    ref,
+    nextTick,
+    defineProps,
+    defineEmits,
+    onMounted,
+    onBeforeUnmount,
+    computed,
+} from "vue";
 import type { InputListItemType } from "../types/InputListItemType";
 import InputListItem from "./components/InputListItem.vue";
 import InputListItemSkeleton from "./components/InputListItemSkeleton.vue";
@@ -12,6 +21,8 @@ const props = defineProps<{
     items: InputListItemType[];
     placeholder?: string;
     label?: string;
+
+    disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -24,7 +35,9 @@ const inputs = ref<InstanceType<typeof PrimaryInput>>();
 
 const filteredItems = computed(() => {
     if (!inputValue.value) return props.items;
-    return props.items.filter((item) => item.label.toLowerCase().includes(inputValue.value.toLowerCase()));
+    return props.items.filter((item) =>
+        item.label.toLowerCase().includes(inputValue.value.toLowerCase())
+    );
 });
 
 function open() {
@@ -66,16 +79,29 @@ onBeforeUnmount(() => {
 
 <template>
     <div>
-        <div class="font-semibold pb-1" v-if="props.label">{{ props.label }}</div>
-        <SecondaryButton @click="open" class="w-full flex justify-start cursor-text active:bg-transparent" :class="[props.modelValue === '' ? 'text-text-200' : '']">
+        <div class="font-semibold pb-1" v-if="props.label">
+            {{ props.label }}
+        </div>
+        <SecondaryButton
+            :disabled="disabled"
+            @click="!disabled ? open() : ''"
+            class="w-full flex justify-start"
+            :class="[
+                props.modelValue === '' ? 'text-text-200' : '',
+                disabled ? '!cursor-default' : '!cursor-text',
+            ]">
             {{ props.modelValue === "" ? props.placeholder : props.modelValue }}
         </SecondaryButton>
     </div>
 
-    <div v-if="opened" class="absolute min-w-full min-h-screen left-0 top-0 !m-0 bg-background">
+    <div
+        v-if="opened"
+        class="absolute z-1 min-w-full min-h-screen left-0 top-0 !m-0 bg-background">
         <div class="h-12 w-full border-b-2 border-b-secondary-100 wrapper-base">
             <div class="flex items-center justify-between w-full">
-                <div class="font-medium text-lg w-full text-center">{{ label }}</div>
+                <div class="font-medium text-lg w-full text-center">
+                    {{ label }}
+                </div>
                 <SecondaryButton class="border-none px-[10px]" @click="close">
                     <CloseIcon />
                 </SecondaryButton>
@@ -85,17 +111,30 @@ onBeforeUnmount(() => {
         <div class="wrapper-base mt-5">
             <div class="w-full flex flex-col space-y-5">
                 <div class="bg-primary-100 p-2 rounded-lg">
-                    <PrimaryInput ref="inputs" :placeholder="props.placeholder" v-model="inputValue" />
+                    <PrimaryInput
+                        ref="inputs"
+                        :placeholder="props.placeholder"
+                        v-model="inputValue">
+                        <template #icon>
+                            <MagnifyIcon />
+                        </template>
+                    </PrimaryInput>
                 </div>
 
                 <div class="flex flex-col space-y-3">
-                    <div v-if="props.items.length === 0" class="flex flex-col space-y-3">
+                    <div
+                        v-if="props.items.length === 0"
+                        class="flex flex-col space-y-3">
                         <InputListItemSkeleton />
                         <InputListItemSkeleton />
                         <InputListItemSkeleton />
                     </div>
 
-                    <InputListItem v-for="item in filteredItems" :key="item.label" :item="item" @click="select(item)" />
+                    <InputListItem
+                        v-for="item in filteredItems"
+                        :key="item.label"
+                        :item="item"
+                        @click="select(item)" />
                 </div>
             </div>
         </div>
