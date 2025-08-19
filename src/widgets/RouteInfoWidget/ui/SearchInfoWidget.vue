@@ -11,7 +11,6 @@ import SearchInfoSkeleton from "./SearchInfo/SearchInfoSkeleton.vue";
 import { defineComponent, type PropType } from "vue";
 import { Types as DeparturesEntityTypes, Api as DeparturesEntityApi } from "@/entities/DeparturesEntity";
 import { Api as ArrivalsEntityApi } from "@/entities/ArrivalsEntity";
-import { getArrivals as apiGetArrivals } from "@/shared/api/API/arrivals";
 import type { RouterRoutesType } from "@/app/router/types/RouterRoutesType";
 
 export default defineComponent({
@@ -37,13 +36,8 @@ export default defineComponent({
         this.person = this.searchParams.person;
         this.date = this.searchParams.date;
 
-        let departures: DeparturesEntityTypes.DepartureType[] = DeparturesEntityApi.getAllDepartures();
-
-        if (departures.length !== 0) {
-            this.setDepatures();
-        }
-
-        this.setArrivals();
+        DeparturesEntityApi.getLoadAllDepartures().then(() => this.setDepatures());
+        ArrivalsEntityApi.getLoadAllArrivals(this.searchParams.cityDepartureId).then(() => this.setArrivals());
     },
     methods: {
         setDepatures() {
@@ -51,28 +45,8 @@ export default defineComponent({
             this.isDeparturesLoaded = true;
         },
         setArrivals(): void {
-            if (ArrivalsEntityApi.getAllArrivals().length !== 0 && this.searchParams.cityDepartureId == Number(ArrivalsEntityApi.getDeparture())) {
-                this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
-                this.isArrivalsLoaded = true;
-                return;
-            }
-
-            apiGetArrivals(this.searchParams.cityDepartureId)
-                .then((arrivals) => {
-                    ArrivalsEntityApi.setArrivals(arrivals, this.searchParams.cityDepartureId);
-                    this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
-                    this.isArrivalsLoaded = true;
-                })
-                .catch((error) => {
-                    console.error("Error fetching arrivals:", error);
-                });
-        },
-    },
-    watch: {
-        "departuresStore.departures": {
-            handler() {
-                this.setDepatures();
-            },
+            this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
+            this.isArrivalsLoaded = true;
         },
     },
 });

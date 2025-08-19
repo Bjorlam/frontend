@@ -70,20 +70,14 @@ export default defineComponent({
         };
     },
     async created() {
-        if (DeparturesEntityApi.getAllDepartures().length !== 0) {
+        DeparturesEntityApi.getLoadAllDepartures().then(() => {
             this.setDepartureItems();
-        }
-        if (this.$route.query.cityDepartureName) {
-            const intervalId = window.setInterval(() => {
-                const result = DeparturesEntityApi.getAllDepartures();
-                if (result.length > 0) {
-                    this.setArrivalItems(String(this.$route.query.cityDepartureName));
-                    if (intervalId) {
-                        clearInterval(intervalId);
-                    }
-                }
-            }, 200);
-        }
+            if (this.$route.query.cityDepartureName && this.$route.query.cityArrivalName) {
+                ArrivalsEntityApi.getLoadAllArrivals(Number(DeparturesEntityApi.getDepartureByName(String(this.$route.query.cityDepartureName))?.cityID)).then(() => {
+                    this.setArrivalItems();
+                });
+            }
+        });
     },
     methods: {
         openRoutesPage() {
@@ -99,33 +93,20 @@ export default defineComponent({
                 return createInputListItemType(item.name, description);
             });
         },
-        async loadArrivals(cityDepartureName: string) {
-            if (ArrivalsEntityApi.getAllArrivals().length !== 0 && DeparturesEntityApi.getDepartureByName(cityDepartureName)?.cityID == Number(ArrivalsEntityApi.getDeparture())) {
-                return;
-            }
-            await getArrivals(Number(DeparturesEntityApi.getDepartureByName(cityDepartureName)?.cityID)).then((arrivals) => {
-                ArrivalsEntityApi.setArrivals(arrivals, Number(DeparturesEntityApi.getDepartureByName(cityDepartureName)?.cityID));
-            });
-        },
-        setArrivalItems(cityDepartureName: string) {
-            this.loadArrivals(cityDepartureName).then(() => {
-                this.arrivalItems = ArrivalsEntityApi.getAllArrivals().map((item) => {
-                    const parts = [item.regionName, item.countryName].map((v) => (v && v.toLowerCase() !== "null" ? v : "")).filter(Boolean) as string[];
-                    const description = parts.length ? parts.join(", ") : null;
-                    return createInputListItemType(item.name, description);
-                });
+        setArrivalItems() {
+            this.arrivalItems = ArrivalsEntityApi.getAllArrivals().map((item) => {
+                const parts = [item.regionName, item.countryName].map((v) => (v && v.toLowerCase() !== "null" ? v : "")).filter(Boolean) as string[];
+                const description = parts.length ? parts.join(", ") : null;
+                return createInputListItemType(item.name, description);
             });
         },
     },
     watch: {
-        "departuresStore.departures": {
-            handler() {
-                this.setDepartureItems();
-            },
-        },
-        localCityDepartureName(newVal: string) {
+        localCityDepartureName(cityDepartureName: string) {
             this.localCityArrivalName = "";
-            this.setArrivalItems(newVal);
+            ArrivalsEntityApi.getLoadAllArrivals(Number(DeparturesEntityApi.getDepartureByName(cityDepartureName)?.cityID)).then(() => {
+                this.setArrivalItems();
+            });
         },
     },
 });
