@@ -40,7 +40,9 @@ import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
             </div>
         </div>
 
-        <div v-if="showMore" class="w-full flex justify-between items-center !mt-2 space-x-2 **:text-text-200">
+        <div
+            v-if="showMore"
+            class="w-full flex justify-between items-center !mt-2 space-x-2 **:text-text-200">
             <div>
                 {{ formatDate(route.depDateTime) }}
             </div>
@@ -60,14 +62,15 @@ import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
             </div>
         </div>
         <div class="flex justify-between">
-            <div class="items-end flex space-x-3 *:flex *:space-x-1 *:items-center *:font-medium [&>*>div]:mb-[-3px]">
+            <div
+                class="items-end flex space-x-3 *:flex *:space-x-1 *:items-center *:font-medium [&>*>div]:mb-[-3px]">
                 <div>
                     <AccountOutlineIcon />
                     <div>{{ route.places }} Мест</div>
                 </div>
                 <div v-if="!route.isPrintTicket">
                     <TagOutlineIcon />
-                    <div>Можно не печатать</div>
+                    <div class="!mb-0">Можно не печатать</div>
                 </div>
             </div>
             <div class="flex items-center *:text-3xl *:font-medium">
