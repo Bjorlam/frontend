@@ -130,7 +130,6 @@ defineExpose({
 
                     <InputListItem
                         v-for="item in filteredItems"
-                        :key="item.label"
                         :item="item"
                         @click="select(item)" />
                 </div>

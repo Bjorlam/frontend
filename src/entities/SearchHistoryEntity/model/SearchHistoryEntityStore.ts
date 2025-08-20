@@ -33,7 +33,11 @@ export const useSearchHistoryStore = defineStore(
         );
 
         const addItem = (item: SearchHistoryItemType) => {
-            state.items.push(item);
+            state.items.unshift(item);
+
+            if (state.items.length > 20) {
+                state.items = state.items.slice(0, 10);
+            }
         };
 
         const removeItem = (id: string) => {
