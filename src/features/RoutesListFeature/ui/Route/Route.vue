@@ -23,10 +23,10 @@ import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
 
             <div class="font-medium">
                 {{
-                    route.tripTime
-                        .split(":")
-                        .map((v, i) => (i === 0 ? +v + "ч" : +v + "м"))
-                        .join(" ")
+                    (() => {
+                        const [h, m] = route.tripTime.split(":").map(Number);
+                        return h > 0 ? `${h}ч ${m}м` : `${m}м`;
+                    })()
                 }}
             </div>
 
@@ -57,7 +57,7 @@ import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
                 {{ route.stationDepName }}
             </div>
 
-            <div>
+            <div class="text-right">
                 {{ route.stationArrName }}
             </div>
         </div>

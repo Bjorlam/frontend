@@ -17,13 +17,15 @@ import PrimaryInput from "@/shared/ui/Input";
                     placeholder="Ростов-На-Дону"
                     v-model="localCityDepartureName"
                     label="Откуда"
-                    :items="departureItems" />
+                    :items="departureItems"
+                    ref="inputCityDepartureName" />
                 <InputListWidget
                     placeholder="Краснодар"
                     :disabled="Boolean(localCityDepartureName == '')"
                     v-model="localCityArrivalName"
                     label="Куда"
-                    :items="arrivalItems" />
+                    :items="arrivalItems"
+                    ref="inputCityArrivalName" />
                 <div>
                     <DefaultRadioGroup
                         :options="[
@@ -40,15 +42,26 @@ import PrimaryInput from "@/shared/ui/Input";
                     >Дата</PrimaryInput
                 >
             </div>
-            <PrimaryButton class="mt-4" @click="openRoutesPage"
-                >Найти рейсы
+            <PrimaryButton
+                class="mt-4"
+                @click="
+                    localCityDepartureName == ''
+                        ? openDeparturesList()
+                        : localCityArrivalName == ''
+                        ? openArrivalsList()
+                        : openRoutesPage()
+                "
+                :disabled="
+                    localCityDepartureName == '' || localCityArrivalName == ''
+                ">
+                Найти рейсы
             </PrimaryButton>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import {
     createRouterRoutesType,
     toRouteParams,
@@ -61,10 +74,11 @@ import {
     Types as DeparturesEntityTypes,
 } from "@/entities/DeparturesEntity";
 import { createInputListItemType } from "@/widgets/InputListWidget/types/InputListItemType";
-import type { ArrivalType } from "@/entities/ArrivalsEntity/types/ArrivalType";
-import { getArrivals } from "@/shared/api/API/arrivals";
 import { Api as ArrivalsEntityApi } from "@/entities/ArrivalsEntity";
-
+import {
+    Api as SearchHistoryEntityApi,
+    Types as SearchHistoryEntityTypes,
+} from "@/entities/SearchHistoryEntity";
 export default defineComponent({
     props: {
         cityDepartureName: {
@@ -123,7 +137,38 @@ export default defineComponent({
         });
     },
     methods: {
+        openDeparturesList() {
+            (
+                this.$refs.inputCityDepartureName as InstanceType<
+                    typeof InputListWidget
+                >
+            ).open();
+        },
+        openArrivalsList() {
+            (
+                this.$refs.inputCityArrivalName as InstanceType<
+                    typeof InputListWidget
+                >
+            ).open();
+        },
         openRoutesPage() {
+            SearchHistoryEntityApi.addItem(
+                SearchHistoryEntityTypes.createSearchHistoryItem(
+                    this.localCityDepartureName,
+                    Number(
+                        DeparturesEntityApi.getDepartureByName(
+                            this.localCityDepartureName
+                        )?.cityID
+                    ),
+                    this.localCityArrivalName,
+                    Number(
+                        ArrivalsEntityApi.getArrivalByName(
+                            this.localCityArrivalName
+                        )?.cityID
+                    ),
+                    this.localPerson
+                )
+            );
             this.$router.push({
                 name: "routes",
                 params: toRouteParams(

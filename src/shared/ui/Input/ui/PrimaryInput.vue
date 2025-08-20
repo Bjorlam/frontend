@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="font-semibold pb-1" v-if="label">{{ label }}</div>
-        <div class="relative">
+        <div class="relative" @click="focus">
             <div
                 class="flex items-center border-2 border-secondary-100 rounded-lg h-11 px-2"
                 :class="[
@@ -9,9 +9,7 @@
                         ? 'bg-secondary-100/40 text-text-200/50'
                         : 'focus-within:border-accent-100',
                 ]">
-                <div class="mr-2 flex items-center">
-                    <slot name="icon" />
-                </div>
+                <slot name="icon" />
                 <input
                     ref="input"
                     class="outline-none w-full placeholder:text-text-200 bg-transparent"

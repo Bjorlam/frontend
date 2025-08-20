@@ -30,7 +30,9 @@ export function getDeparture(): number | undefined {
     return useArrivalsEntityStore().getDeparture();
 }
 
-export async function getLoadAllArrivals(departure: number): Promise<ArrivalType[]> {
+export async function getLoadAllArrivals(
+    departure: number
+): Promise<ArrivalType[]> {
     if (getAllArrivals().length !== 0 && departure === getDeparture()) {
         return getAllArrivals();
     }

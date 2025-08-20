@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SecondaryButton from "@/shared/ui/Button/variants/SecondaryButton.vue";
 import PrimaryInput from "@/shared/ui/Input/index.ts";
-import CloseIcon from "vue-material-design-icons/Close.vue";
+import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import { ref, nextTick, onMounted, onBeforeUnmount, computed } from "vue";
 import type { InputListItemType } from "../types/InputListItemType";
@@ -67,6 +67,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener("popstate", handleBack);
 });
+
+defineExpose({
+    open,
+});
 </script>
 
 <template>
@@ -91,12 +95,14 @@ onBeforeUnmount(() => {
         class="absolute z-1 min-w-full min-h-screen left-0 top-0 !m-0 bg-background">
         <div class="h-12 w-full border-b-2 border-b-secondary-100 wrapper-base">
             <div class="flex items-center justify-between w-full">
-                <div class="font-medium text-lg w-full text-center">
+                <SecondaryButton
+                    class="border-none min-h-fit !p-1"
+                    @click="close">
+                    <ChevronLeftIcon />
+                </SecondaryButton>
+                <div class="font-medium text-lg w-full text-center mr-8">
                     {{ label }}
                 </div>
-                <SecondaryButton class="border-none px-[10px]" @click="close">
-                    <CloseIcon />
-                </SecondaryButton>
             </div>
         </div>
 
@@ -108,7 +114,7 @@ onBeforeUnmount(() => {
                         :placeholder="props.placeholder"
                         v-model="inputValue">
                         <template #icon>
-                            <MagnifyIcon />
+                            <MagnifyIcon class="mr-2" />
                         </template>
                     </PrimaryInput>
                 </div>

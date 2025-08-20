@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SearchWidget from "@/widgets/SearchWidget";
+import SearchHistoryFeature from "@/features/SearchHistoryFeature";
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import SearchWidget from "@/widgets/SearchWidget";
                 :cityArrivalName="cityArrivalName"
                 :person="person"
                 :date="date" />
+            <SearchHistoryFeature class="mt-10" />
         </div>
     </div>
 </template>
