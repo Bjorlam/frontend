@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import RouteListFeature from "@/features/RoutesListFeature";
-import { fromRouteParams, type RouterRoutesType } from "@/app/router/types/RouterRoutesType.ts";
+import {
+    fromRouteParams,
+    type RouterRoutesType,
+} from "@/app/router/types/RouterRoutesType.ts";
 import SearchInfoWidget from "@/widgets/RouteInfoWidget/index.ts";
+import { computed, watch, ref } from "vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const props = defineProps<{
     cityDepartureId: string;
     cityArrivalId: string;
@@ -10,7 +16,14 @@ const props = defineProps<{
     person: string;
 }>();
 
-const routerParams: RouterRoutesType = fromRouteParams(props);
+const routerParams = ref(fromRouteParams(route.params));
+
+watch(
+    () => route.params,
+    (newParams) => {
+        routerParams.value = fromRouteParams(newParams);
+    }
+);
 </script>
 
 <template>

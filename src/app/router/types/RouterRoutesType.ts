@@ -7,7 +7,12 @@ export interface RouterRoutesType {
     person: number;
 }
 
-export function createRouterRoutesType(cityDepartureId: number, cityArrivalId: number, date: Date, person: number): RouterRoutesType {
+export function createRouterRoutesType(
+    cityDepartureId: number,
+    cityArrivalId: number,
+    date: Date,
+    person: number
+): RouterRoutesType {
     return {
         cityDepartureId,
         cityArrivalId,
@@ -16,7 +21,9 @@ export function createRouterRoutesType(cityDepartureId: number, cityArrivalId: n
     };
 }
 
-export function toRouteParams(params: RouterRoutesType): Record<string, string> {
+export function toRouteParams(
+    params: RouterRoutesType
+): Record<string, string> {
     return {
         cityDepartureId: String(params.cityDepartureId),
         cityArrivalId: String(params.cityArrivalId),
@@ -25,13 +32,20 @@ export function toRouteParams(params: RouterRoutesType): Record<string, string> 
     };
 }
 
-export function fromRouteParams(params: Record<string, string>): RouterRoutesType {
-    const [day, month, year] = params.date.split(".").map(Number);
+export function fromRouteParams(
+    params: Record<string, string | string[] | undefined>
+): RouterRoutesType {
+    const getString = (val: string | string[] | undefined): string =>
+        Array.isArray(val) ? val[0] : val ?? "";
+
+    const dateStr = getString(params.date);
+    const [day, month, year] = dateStr.split(".").map(Number);
     const date = new Date(year, month - 1, day);
+
     return {
-        cityDepartureId: Number(params.cityDepartureId),
-        cityArrivalId: Number(params.cityArrivalId),
-        date: date,
-        person: Number(params.person),
+        cityDepartureId: Number(getString(params.cityDepartureId)),
+        cityArrivalId: Number(getString(params.cityArrivalId)),
+        date,
+        person: Number(getString(params.person)),
     };
 }
