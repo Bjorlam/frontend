@@ -44,17 +44,19 @@ import PrimaryInput from "@/shared/ui/Input";
             </div>
             <PrimaryButton
                 class="mt-4"
-                @click="
-                    localCityDepartureName == ''
-                        ? openDeparturesList()
-                        : localCityArrivalName == ''
-                        ? openArrivalsList()
-                        : openRoutesPage()
-                "
+                @click="openRoutesPage"
                 :disabled="
-                    localCityDepartureName == '' || localCityArrivalName == ''
+                    localCityDepartureName == '' ||
+                    localCityArrivalName == '' ||
+                    !isAllLoaded()
                 ">
-                Найти рейсы
+                {{
+                    localCityDepartureName == "" || localCityArrivalName == ""
+                        ? "Введите данные маршрута"
+                        : !isAllLoaded()
+                        ? "Загрузка данных..."
+                        : "Найти рейсы"
+                }}
             </PrimaryButton>
         </div>
     </div>
@@ -151,7 +153,31 @@ export default defineComponent({
                 >
             ).open();
         },
+        isAllLoaded(): boolean {
+            if (
+                this.departureItems.length == 0 ||
+                this.arrivalItems.length == 0
+            ) {
+                return false;
+            }
+
+            return true;
+        },
         openRoutesPage() {
+            if (this.localCityDepartureName == "") {
+                this.openDeparturesList();
+                return;
+            }
+
+            if (this.localCityArrivalName == "") {
+                this.openArrivalsList();
+                return;
+            }
+
+            if (!this.isAllLoaded) {
+                return;
+            }
+
             SearchHistoryEntityApi.addItem(
                 SearchHistoryEntityTypes.createSearchHistoryItem(
                     this.localCityDepartureName,

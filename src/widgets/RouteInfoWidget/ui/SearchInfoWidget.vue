@@ -18,6 +18,7 @@ import { defineComponent, type PropType } from "vue";
 import { Api as DeparturesEntityApi } from "@/entities/DeparturesEntity";
 import { Api as ArrivalsEntityApi } from "@/entities/ArrivalsEntity";
 import type { RouterRoutesType } from "@/app/router/types/RouterRoutesType";
+import { Api as PopupWidgetApi } from "@/widgets/PopupWidget";
 
 export default defineComponent({
     props: {

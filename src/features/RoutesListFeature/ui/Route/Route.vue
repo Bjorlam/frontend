@@ -5,7 +5,7 @@ import TallyMark1Icon from "vue-material-design-icons/TallyMark1.vue";
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import AccountOutlineIcon from "vue-material-design-icons/AccountOutline.vue";
 import TagOutlineIcon from "vue-material-design-icons/TagOutline.vue";
-import CurrencyRubIcon from "vue-material-design-icons/CurrencyRub.vue";
+import BagSuitcaseOutlineIcon from "vue-material-design-icons/BagSuitcaseOutline.vue";
 
 import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
 </script>
@@ -63,14 +63,18 @@ import { PrimaryButton, SecondaryButton } from "@/shared/ui/Button";
         </div>
         <div class="flex justify-between">
             <div
-                class="items-end flex space-x-3 *:flex *:space-x-1 *:items-center *:font-medium [&>*>div]:mb-[-3px]">
+                class="items-end flex flex-wrap space-x-3 *:flex *:space-x-1 *:items-center *:font-medium">
                 <div>
                     <AccountOutlineIcon />
-                    <div>{{ route.places }} Мест</div>
+                    <div class="mb-[-3px]">{{ route.places }} Мест</div>
                 </div>
                 <div v-if="!route.isPrintTicket">
                     <TagOutlineIcon />
-                    <div class="!mb-0">Можно не печатать</div>
+                    <div>Можно не печатать</div>
+                </div>
+                <div v-if="route.canBuyBaggage && showMore">
+                    <BagSuitcaseOutlineIcon />
+                    <div>Стоимость багажа: {{ route.baggageCost }} ₽</div>
                 </div>
             </div>
             <div class="flex items-center *:text-3xl *:font-medium">

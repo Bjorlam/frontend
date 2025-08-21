@@ -40,6 +40,7 @@ import {
     createRouterRoutesType,
     toRouteParams,
 } from "@/app/router/types/RouterRoutesType.ts";
+import { Api as PopupWidgetApi } from "@/widgets/PopupWidget";
 
 export default defineComponent({
     props: {
@@ -62,26 +63,35 @@ export default defineComponent({
     },
     methods: {
         async init(searchParams: RouterRoutesType) {
-            try {
-                this.isDeparturesLoaded =
-                    DeparturesEntityApi.getAllDepartures().length !== 0;
+            this.isDeparturesLoaded =
+                DeparturesEntityApi.getAllDepartures().length !== 0;
 
-                getRoutes(
-                    searchParams.cityDepartureId,
-                    searchParams.cityArrivalId,
-                    searchParams.date,
-                    searchParams.person
-                ).then((data) => {
+            getRoutes(
+                searchParams.cityDepartureId,
+                searchParams.cityArrivalId,
+                searchParams.date,
+                searchParams.person
+            )
+                .then((data) => {
                     if (!data || data instanceof Date) {
                         this.nextDate = data;
                     } else if (data) {
                         this.routes = data;
                     }
                     this.isLoading = false;
+                })
+                .catch((error) => {
+                    PopupWidgetApi.createPopup("error")
+                        .init({
+                            title: "Не удалось получить данные",
+                            content: error,
+                            buttonLabel: "На главную",
+                            buttonClick: () => {
+                                this.$router.push({ name: "home" });
+                            },
+                        })
+                        .show();
                 });
-            } catch (error) {
-                console.error("Error fetching routes:", error);
-            }
         },
         searchRoutes(date: Date) {},
         researchRoutes(date: Date) {

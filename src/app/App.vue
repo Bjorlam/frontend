@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import HeaderWidget from "@/widgets/HeaderWidget";
 import Alerts from "@/features/AlertsFeature/inedx";
+import { PopupWidget } from "@/widgets/PopupWidget";
 </script>
 
 <template>
     <div class="wrapper-base wrapper-922">
         <HeaderWidget class="w-full mt-5" />
     </div>
+
+    <PopupWidget />
 
     <div>
         <RouterView />
