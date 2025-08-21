@@ -5,13 +5,13 @@ import { PopupWidget } from "@/widgets/PopupWidget";
 </script>
 
 <template>
-    <div class="wrapper-base wrapper-922">
-        <HeaderWidget class="w-full mt-5" />
+    <div class="wrapper-base wrapper-922 fixed bg-background py-5">
+        <HeaderWidget class="w-full" />
     </div>
 
     <PopupWidget />
 
-    <div>
+    <div class="mt-[72px]">
         <RouterView />
     </div>
     <div>
