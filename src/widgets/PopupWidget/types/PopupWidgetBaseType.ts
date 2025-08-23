@@ -1,5 +1,6 @@
 export interface PopupTypes {
     error: import("../variants/ErrorPopup/types/PopupWidgetErrorPopupType").ErrorPopupConfig;
+    empty: import("../variants/EmptyPopup/types/PopupWidgetEmptyPopupType").EmptyPopupConfig;
 }
 
 export abstract class BasePopup<T extends keyof PopupTypes> {

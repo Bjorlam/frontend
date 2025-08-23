@@ -18,7 +18,7 @@ const router = createRouter({
             props: true,
         },
         {
-            path: "/details/:scheduleId",
+            path: "/details/:scheduleId/:person",
             name: "details",
             component: DetailsPage,
             props: true,

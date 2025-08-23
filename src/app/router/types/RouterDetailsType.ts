@@ -1,21 +1,29 @@
 export interface RouterDetailsType {
     scheduleId: number;
+    person: number;
 }
 
-export function createRouterRoutesType(scheduleId: number): RouterDetailsType {
-    return { scheduleId };
+export function createRouterRoutesType(
+    scheduleId: number,
+    person: number
+): RouterDetailsType {
+    return { scheduleId, person };
 }
 
 export function toRouteParams(
     params: RouterDetailsType
 ): Record<string, string> {
-    return { sceduleId: String(params.scheduleId) };
+    return {
+        sceduleId: String(params.scheduleId),
+        person: String(params.person),
+    };
 }
 
 export function fromRouteParams(
     params: Record<string, string | string[] | undefined>
 ): RouterDetailsType {
-    return {
-        scheduleId: Number(params.scheduleId),
-    };
+    return createRouterRoutesType(
+        Number(params.scheduleId),
+        Number(params.person)
+    );
 }

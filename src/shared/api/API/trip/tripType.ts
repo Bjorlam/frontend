@@ -10,7 +10,7 @@ export interface DocType {
     mask: string;
 }
 
-export interface Place {
+export interface Seat {
     number: string | null;
     level: number;
     price: number;
@@ -40,7 +40,7 @@ export interface Passenger {
     agentTarif: number;
 }
 
-export interface RouteInfoType {
+export interface TripType {
     insurance: Insurance[];
     baggagePrice: number;
     orderType: string;
@@ -66,7 +66,7 @@ export interface RouteInfoType {
     docTypes: DocType[];
     seatlimit: number;
     carrier: string;
-    places: Place[];
+    seats: Seat[];
     phone: string | null;
     returns: ReturnPolicy[];
     passangers: Passenger[];

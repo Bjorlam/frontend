@@ -21,14 +21,21 @@
 
 .link {
     color: var(--color-text-200);
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .link:visited {
     color: var(--color-text-200);
 }
 
-.link:hover {
-    text-decoration: underline;
+.wrapper-900 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.wrapper-900 * {
+    max-width: 900px !important;
 }
 
 .wrapper-922 * {

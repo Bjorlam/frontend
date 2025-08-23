@@ -1,17 +1,17 @@
-import { type RouteInfoType } from "./routeInfoType";
+import { type TripType } from "./tripType";
 import { api } from "../base";
 
-export const getRouteInfo = async (
+export const getTrip = async (
     orderId: number,
     uuid: string
-): Promise<RouteInfoType> => {
+): Promise<TripType> => {
     const response = await api.get(
         `/reserve/getpass?uuid=${uuid}&orderid=${orderId}`
     );
     return normalizeResponse(response.data[0]);
 };
 
-function normalizeResponse(raw: any): RouteInfoType {
+function normalizeResponse(raw: any): TripType {
     return {
         insurance: (raw.insurance ?? []).map((i: any) => ({
             price: Number(i.price),
@@ -46,7 +46,7 @@ function normalizeResponse(raw: any): RouteInfoType {
         })),
         seatlimit: Number(raw.seatlimit),
         carrier: String(raw.carrier),
-        places: (raw.places ?? []).map((p: any) => ({
+        seats: (raw.places ?? []).map((p: any) => ({
             number: p.number ? Number(p.number) : null,
             level: Number(p.level),
             price: Number(p.price),
