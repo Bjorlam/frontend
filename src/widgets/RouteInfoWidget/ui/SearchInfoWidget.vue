@@ -4,15 +4,21 @@ import SearchInfoSkeleton from "./SearchInfo/SearchInfoSkeleton.vue";
 </script>
 <template>
     <SearchInfoSkeleton v-if="!isDeparturesLoaded || !isArrivalsLoaded" />
-    <SearchInfo v-else :cityDepartureName="cityDepartureName" :cityArrivalName="cityArrivalName" :person="person" :date="date" />
+    <SearchInfo
+        :searchParams="searchParams"
+        v-else
+        :cityDepartureName="cityDepartureName"
+        :cityArrivalName="cityArrivalName"
+        :person="person"
+        :date="date" />
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
-import { Types as DeparturesEntityTypes, Api as DeparturesEntityApi } from "@/entities/DeparturesEntity";
+import { Api as DeparturesEntityApi } from "@/entities/DeparturesEntity";
 import { Api as ArrivalsEntityApi } from "@/entities/ArrivalsEntity";
-import { getArrivals as apiGetArrivals } from "@/shared/api/API/arrivals";
 import type { RouterRoutesType } from "@/app/router/types/RouterRoutesType";
+import { Api as PopupWidgetApi } from "@/widgets/PopupWidget";
 
 export default defineComponent({
     props: {
@@ -34,45 +40,39 @@ export default defineComponent({
         };
     },
     async created() {
-        this.person = this.searchParams.person;
-        this.date = this.searchParams.date;
-
-        let departures: DeparturesEntityTypes.DepartureType[] = DeparturesEntityApi.getAllDepartures();
-
-        if (departures.length !== 0) {
-            this.setDepatures();
-        }
-
-        this.setArrivals();
+        this.init(this.searchParams);
     },
     methods: {
-        setDepatures() {
-            this.cityDepartureName = DeparturesEntityApi.getDepartureByCityID(this.searchParams.cityDepartureId)?.name ?? "";
+        async init(searchParams: RouterRoutesType) {
+            this.person = searchParams.person;
+            this.date = searchParams.date;
+
+            DeparturesEntityApi.getLoadAllDepartures().then(() =>
+                this.setDepatures(searchParams)
+            );
+            ArrivalsEntityApi.getLoadAllArrivals(
+                searchParams.cityDepartureId
+            ).then(() => this.setArrivals(searchParams));
+        },
+        setDepatures(searchParams: RouterRoutesType) {
+            this.cityDepartureName =
+                DeparturesEntityApi.getDepartureByCityID(
+                    searchParams.cityDepartureId
+                )?.name ?? "";
             this.isDeparturesLoaded = true;
         },
-        setArrivals(): void {
-            if (ArrivalsEntityApi.getAllArrivals().length !== 0 && this.searchParams.cityDepartureId == Number(ArrivalsEntityApi.getDeparture())) {
-                this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
-                this.isArrivalsLoaded = true;
-                return;
-            }
-
-            apiGetArrivals(this.searchParams.cityDepartureId)
-                .then((arrivals) => {
-                    ArrivalsEntityApi.setArrivals(arrivals, this.searchParams.cityDepartureId);
-                    this.cityArrivalName = ArrivalsEntityApi.getArrivalByCityID(this.searchParams.cityArrivalId)?.name ?? "";
-                    this.isArrivalsLoaded = true;
-                })
-                .catch((error) => {
-                    console.error("Error fetching arrivals:", error);
-                });
+        setArrivals(searchParams: RouterRoutesType): void {
+            this.cityArrivalName =
+                ArrivalsEntityApi.getArrivalByCityID(searchParams.cityArrivalId)
+                    ?.name ?? "";
+            this.isArrivalsLoaded = true;
         },
     },
     watch: {
-        "departuresStore.departures": {
-            handler() {
-                this.setDepatures();
-            },
+        searchParams(newVal) {
+            this.isArrivalsLoaded = false;
+            this.isDeparturesLoaded = false;
+            this.init(newVal);
         },
     },
 });

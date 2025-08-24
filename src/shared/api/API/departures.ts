@@ -1,4 +1,6 @@
-import {api} from "./base";
+import { api } from "./base";
 
-export const getDepartures = () =>
-    api.get("/departures").then(res => res.data);
+export const getDepartures = async () => {
+    const response = await api.get("/departures");
+    return response.data[0].points;
+};

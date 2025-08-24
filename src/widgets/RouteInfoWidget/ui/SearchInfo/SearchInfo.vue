@@ -15,14 +15,15 @@ import ArrowLeftIcon from "vue-material-design-icons/ArrowLeft.vue";
             </div>
             <div>{{ cityArrivalName }}</div>
         </div>
-        <div class="flex space-x-3 font-medium mt-3 *:flex *:space-x-1 *:items-center [&>*>div]:mb-[-3px]">
+        <div
+            class="flex space-x-3 font-medium mt-3 *:flex *:space-x-1 *:items-center [&>*>div]:mb-[-3px]">
             <div>
                 <AccountOutlineIcon />
                 <div>{{ person }} Пассажир{{ person !== 1 ? "а" : "" }}</div>
             </div>
-            <div>
+            <div class="mb-[-3px]">
                 <CalendarMonthOutlineIcon />
-                <div>{{ format(date, "dd.MM.yyyy") }}</div>
+                <div class="!mb-0">{{ format(date, "dd.MM.yyyy") }}</div>
             </div>
         </div>
         <SecondaryButton
@@ -30,7 +31,14 @@ import ArrowLeftIcon from "vue-material-design-icons/ArrowLeft.vue";
             @click="
                 $router.push({
                     name: 'home',
-                    query: toQueryParams(createRouterHomeQueryType(cityDepartureName, cityArrivalName, date, person)),
+                    query: toQueryParams(
+                        createRouterHomeQueryType(
+                            cityDepartureName,
+                            cityArrivalName,
+                            date,
+                            person
+                        )
+                    ),
                 })
             ">
             <div class="flex w-full justify-center">
@@ -43,7 +51,11 @@ import ArrowLeftIcon from "vue-material-design-icons/ArrowLeft.vue";
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { createRouterHomeQueryType, type fromQueryParams, toQueryParams } from "@/app/router/types/RouterHomeQueryType";
+import {
+    createRouterHomeQueryType,
+    type fromQueryParams,
+    toQueryParams,
+} from "@/app/router/types/RouterHomeQueryType";
 import { format } from "date-fns";
 export default defineComponent({
     props: {

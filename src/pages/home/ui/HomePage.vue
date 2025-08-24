@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SearchWidget from "@/widgets/SearchWidget";
+import SearchHistoryFeature from "@/features/SearchHistoryFeature";
 </script>
 
 <template>
@@ -8,7 +9,12 @@ import SearchWidget from "@/widgets/SearchWidget";
             <div class="w-full flex justify-center py-20">
                 <div class="text-3xl archivo-black">Search bus tickets</div>
             </div>
-            <SearchWidget :cityDepartureName="cityDepartureName" :cityArrivalName="cityArrivalName" :person="person" :date="date" />
+            <SearchWidget
+                :cityDepartureName="cityDepartureName"
+                :cityArrivalName="cityArrivalName"
+                :person="person"
+                :date="date" />
+            <SearchHistoryFeature class="mt-10 mb-15" />
         </div>
     </div>
 </template>
@@ -19,19 +25,36 @@ import { parse } from "date-fns";
 export default defineComponent({
     data() {
         return {
-            cityDepartureName: null as unknown as string | null,
-            cityArrivalName: null as unknown as string | null,
-            person: null as unknown as number | null,
-            date: null as unknown as Date | null,
+            cityDepartureName: undefined as string | undefined,
+            cityArrivalName: undefined as string | undefined,
+            person: undefined as number | undefined,
+            date: undefined as Date | undefined,
         };
     },
     created() {
-        this.cityDepartureName = this.$route.query.cityDepartureName != null ? String(this.$route.query.cityDepartureName) : null;
-        this.cityArrivalName = this.$route.query.cityArrivalName != null ? String(this.$route.query.cityArrivalName) : null;
+        this.cityDepartureName =
+            this.$route.query.cityDepartureName != null
+                ? String(this.$route.query.cityDepartureName)
+                : undefined;
 
-        this.person = this.$route.query.person != null ? Number(this.$route.query.person) : null;
+        this.cityArrivalName =
+            this.$route.query.cityArrivalName != null
+                ? String(this.$route.query.cityArrivalName)
+                : undefined;
 
-        this.date = this.$route.query.date != null ? parse(String(this.$route.query.date), "dd.MM.yyyy", new Date()) : null;
+        this.person =
+            this.$route.query.person != null
+                ? Number(this.$route.query.person)
+                : undefined;
+
+        this.date =
+            this.$route.query.date != null
+                ? parse(
+                      String(this.$route.query.date),
+                      "dd.MM.yyyy",
+                      new Date()
+                  )
+                : undefined;
     },
 });
 </script>

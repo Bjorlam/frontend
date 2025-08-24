@@ -1,6 +1,9 @@
-import {computed, type ComputedRef, reactive} from "vue";
-import {defineStore} from "pinia";
-import {createTheme, type ThemeType} from "@/entities/ThemeEntity/types/ThemeType.ts";
+import { computed, type ComputedRef, reactive } from "vue";
+import { defineStore } from "pinia";
+import {
+    createTheme,
+    type ThemeType,
+} from "@/entities/ThemeEntity/types/ThemeType.ts";
 
 export interface ThemeStore {
     state: { current: ThemeType };
@@ -9,7 +12,7 @@ export interface ThemeStore {
 }
 
 export const useThemeStore = defineStore("theme", (): ThemeStore => {
-    const storedTheme: ThemeType = createTheme(localStorage.getItem('theme'));
+    const storedTheme: ThemeType = createTheme(localStorage.getItem("theme"));
     const state: { current: ThemeType } = reactive({
         current: storedTheme as ThemeType,
     });
