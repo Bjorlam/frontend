@@ -14,7 +14,7 @@ import SearchHistoryFeature from "@/features/SearchHistoryFeature";
                 :cityArrivalName="cityArrivalName"
                 :person="person"
                 :date="date" />
-            <SearchHistoryFeature class="mt-10" />
+            <SearchHistoryFeature class="mt-10 mb-15" />
         </div>
     </div>
 </template>
