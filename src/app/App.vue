@@ -2,6 +2,7 @@
 import HeaderWidget from "@/widgets/HeaderWidget";
 import Alerts from "@/features/AlertsFeature/inedx";
 import { PopupWidget } from "@/widgets/PopupWidget";
+import { FooterWidget } from "@/widgets/FooterWidget";
 </script>
 
 <template>
@@ -12,8 +13,13 @@ import { PopupWidget } from "@/widgets/PopupWidget";
     <PopupWidget />
 
     <div class="mt-[72px]">
-        <RouterView />
+        <RouterView class="min-h-[calc(100vh-72px)]" />
     </div>
+
+    <div class="wrapper-base wrapper-922 !px-1 !mb-1">
+        <FooterWidget />
+    </div>
+
     <div>
         <Alerts />
     </div>
