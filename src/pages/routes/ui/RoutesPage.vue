@@ -31,7 +31,7 @@ watch(
         <div class="w-full">
             <SearchInfoWidget :searchParams="routerParams" class="my-10" />
 
-            <RouteListFeature :searchParams="routerParams" />
+            <RouteListFeature :searchParams="routerParams" class="mb-15" />
         </div>
     </div>
 </template>

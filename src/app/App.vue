@@ -16,7 +16,7 @@ import { FooterWidget } from "@/widgets/FooterWidget";
         <RouterView class="min-h-[calc(100vh-72px)]" />
     </div>
 
-    <div class="wrapper-base wrapper-922 !px-1 !mb-1">
+    <div class="wrapper-base wrapper-922 !px-3 !mb-4">
         <FooterWidget />
     </div>
 
